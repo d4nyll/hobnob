@@ -40,6 +40,8 @@
     "superagent": "^3.8.3"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0"
+    "@babel/polyfill": "^7.0.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3"
   }
 }

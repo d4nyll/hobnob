@@ -1,42 +1,39 @@
 import '@babel/polyfill';
-import http from 'http';
+import express from 'express';
+import bodyParser from 'body-parser';
 
-function requestHandler(req, res) {
-  if (req.method === 'POST' && req.url === '/users') {
-    const payloadData = [];
-    req.on('data', (data) => {
-      payloadData.push(data);
-    });
+const app = express();
+app.use(bodyParser.json({ limit: 1e6 }));
 
-    req.on('end', () => {
-      if (payloadData.length === 0) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({
-          message: 'Payload should not be empty',
-        }));
-        return;
-      }
-      if (req.headers['content-type'] !== 'application/json') {
-        res.writeHead(415, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({
-          message: 'The "Content-Type" header must always be "application/json"',
-        }));
-        return;
-      }
-      try {
-        const bodyString = Buffer.concat(payloadData).toString();
-        JSON.parse(bodyString);
-      } catch (e) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({
-          message: 'Payload should be in JSON format',
-        }));
-      }
+app.post('/users', (req, res) => {
+  if (req.headers['content-length'] === '0') {
+    res.status(400);
+    res.set('Content-Type', 'application/json');
+    res.json({
+      message: 'Payload should not be empty',
     });
-  } else {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello, World!');
+    return;
   }
-}
-const server = http.createServer(requestHandler);
-server.listen(8080);
+  if (req.headers['content-type'] !== 'application/json') {
+    res.status(415);
+    res.set('Content-Type', 'application/json');
+    res.json({
+      message: 'The "Content-Type" header must always be "application/json"',
+    });
+  }
+});
+
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err && err.type === 'entity.parse.failed') {
+    res.status(400);
+    res.set('Content-Type', 'application/json');
+    res.json({ message: 'Payload should be in JSON format' });
+    return;
+  }
+  next();
+});
+
+app.listen(process.env.SERVER_PORT, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Hobnob API server listening on port ${process.env.SERVER_PORT}!`);
+});
