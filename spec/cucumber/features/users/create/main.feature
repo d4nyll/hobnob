@@ -37,3 +37,16 @@ Feature: Create User
     | missingFields |
     | email         |
     | password      |
+
+  Scenario Outline: Request Payload with Properties of Unsupported Type
+    When the client creates a POST request to /users
+    And attaches a Create User payload where the <field> field is not a <type>
+    And sends the request
+    Then our API should respond with a 400 HTTP status code
+    And the payload of the response should be a JSON object
+    And contains a message property which says "The email and password fields must be of type string"
+
+    Examples:
+    | field    | type   |
+    | email    | string |
+    | password | string |
