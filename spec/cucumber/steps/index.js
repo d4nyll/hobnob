@@ -95,3 +95,17 @@ When(/^attaches an? (.+) payload where the ([a-zA-Z0-9, ]+) fields? (?:is|are)(\
     .send(JSON.stringify(payload))
     .set('Content-Type', 'application/json');
 });
+
+When(/^attaches an? (.+) payload where the ([a-zA-Z0-9, ]+) fields? (?:is|are) exactly (.+)$/, function (payloadType, fields, value) {
+  const payload = {
+    email: 'e@ma.il',
+    password: 'password',
+  };
+  const fieldsToModify = fields.split(',').map(s => s.trim()).filter(s => s !== '');
+  fieldsToModify.forEach((field) => {
+    payload[field] = value;
+  });
+  this.request
+    .send(JSON.stringify(payload))
+    .set('Content-Type', 'application/json');
+});

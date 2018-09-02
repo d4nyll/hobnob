@@ -39,6 +39,7 @@ Feature: Create User
     | password      |
 
   Scenario Outline: Request Payload with Properties of Unsupported Type
+
     When the client creates a POST request to /users
     And attaches a Create User payload where the <field> field is not a <type>
     And sends the request
@@ -50,3 +51,19 @@ Feature: Create User
     | field    | type   |
     | email    | string |
     | password | string |
+
+Scenario Outline: Request Payload with invalid email format
+
+  When the client creates a POST request to /users
+  And attaches a Create User payload where the email field is exactly <email>
+  And sends the request
+  Then our API should respond with a 400 HTTP status code
+  And the payload of the response should be a JSON object
+  And contains a message property which says "The email field must be a valid email."
+
+  Examples:
+
+  | email     |
+  | a238juqy2 |
+  | a@1.2.3.4 |
+  | a,b,c@!!  |
