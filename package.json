@@ -8,9 +8,9 @@
     "fix": "eslint src --fix",
     "lint": "eslint src",
     "precommit": "yarn run lint",
-    "serve": "yarn run build && dotenv node dist/index.js",
+    "serve": "yarn run build && dotenv -e envs/.env node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test:e2e": "dotenv cucumber-js -- spec/cucumber/features --require-module @babel/register --require spec/cucumber/steps",
+    "test:e2e": "dotenv -e envs/test.env -e envs/.env cucumber-js -- spec/cucumber/features --require-module @babel/register --require spec/cucumber/steps",
     "watch": "nodemon -w src --exec yarn run serve"
   },
   "repository": {
