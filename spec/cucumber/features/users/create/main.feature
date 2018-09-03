@@ -52,18 +52,28 @@ Feature: Create User
     | email    | string |
     | password | string |
 
-Scenario Outline: Request Payload with invalid email format
+  Scenario Outline: Request Payload with invalid email format
 
-  When the client creates a POST request to /users
-  And attaches a Create User payload where the email field is exactly <email>
-  And sends the request
-  Then our API should respond with a 400 HTTP status code
-  And the payload of the response should be a JSON object
-  And contains a message property which says "The email field must be a valid email."
+    When the client creates a POST request to /users
+    And attaches a Create User payload where the email field is exactly <email>
+    And sends the request
+    Then our API should respond with a 400 HTTP status code
+    And the payload of the response should be a JSON object
+    And contains a message property which says "The email field must be a valid email."
 
-  Examples:
+    Examples:
 
-  | email     |
-  | a238juqy2 |
-  | a@1.2.3.4 |
-  | a,b,c@!!  |
+    | email     |
+    | a238juqy2 |
+    | a@1.2.3.4 |
+    | a,b,c@!!  |
+
+  Scenario: Minimal Valid User
+
+    When the client creates a POST request to /users
+    And attaches a valid Create User payload
+    And sends the request
+    Then our API should respond with a 201 HTTP status code
+    And the payload of the response should be a string
+    And the payload object should be added to the database, grouped under the "user" type
+    And the newly-created user should be deleted
