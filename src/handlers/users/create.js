@@ -1,26 +1,22 @@
 import ValidationError from '../../validators/errors/validation-error';
-import validate from '../../validators/users/create';
+import create from '../../engines/users/create';
 
 function createUser(req, res, db) {
-  const validationResults = validate(req);
-  if (validationResults instanceof ValidationError) {
-    res.status(400);
-    res.set('Content-Type', 'application/json');
-    res.json({ message: validationResults.message });
-    return;
-  }
-  db.index({
-    index: process.env.ELASTICSEARCH_INDEX,
-    type: 'user',
-    body: req.body,
-  }).then((result) => {
+  create(req, db).then((result) => {
     res.status(201);
     res.set('Content-Type', 'text/plain');
-    res.send(result._id);
+    return res.send(result._id);
+  }, (err) => {
+    if (err instanceof ValidationError) {
+      res.status(400);
+      res.set('Content-Type', 'application/json');
+      return res.json({ message: err.message });
+    }
+    return undefined;
   }).catch(() => {
     res.status(500);
     res.set('Content-Type', 'application/json');
-    res.json({ message: 'Internal Server Error' });
+    return res.json({ message: 'Internal Server Error' });
   });
 }
 
