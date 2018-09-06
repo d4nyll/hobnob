@@ -16,6 +16,9 @@ if ! systemctl is-active --quiet elasticsearch.service; then
   done
 fi
 
+# Clean the test index (if it exists)
+curl --silent -o /dev/null -X DELETE "$ELASTICSEARCH_HOSTNAME:$ELASTICSEARCH_PORT/$ELASTICSEARCH_INDEX"
+
 # Run our API server as a background process
 yarn run serve &
 

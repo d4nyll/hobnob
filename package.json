@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist && babel src -d dist",
+    "build": "rimraf dist && babel src -d dist --copy-files",
     "fix": "eslint src --fix",
     "lint": "eslint src",
     "precommit": "yarn run lint",
@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "ajv": "^6.5.3",
     "body-parser": "^1.18.3",
     "elasticsearch": "^15.1.1",
     "express": "^4.16.3"
