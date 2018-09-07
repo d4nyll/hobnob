@@ -9,7 +9,8 @@
     "lint": "eslint src",
     "precommit": "yarn run lint",
     "serve": "yarn run build && dotenv -e envs/.env node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "yarn run test:unit && yarn run test:e2e",
+    "test:unit": "mocha 'src/**/*.test.js' --require @babel/register",
     "test:e2e": "dotenv -e envs/test.env -e envs/.env ./scripts/e2e.test.sh",
     "watch": "nodemon -w src --exec yarn run serve"
   },
@@ -35,6 +36,7 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "husky": "^0.14.3",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.4",
     "rimraf": "^2.6.2",
     "superagent": "^3.8.3"
