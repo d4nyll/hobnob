@@ -1,7 +1,4 @@
-import ValidationError from '../../validators/errors/validation-error';
-import create from '../../engines/users/create';
-
-function createUser(req, res, db) {
+function createUser(req, res, db, create, ValidationError) {
   create(req, db).then((result) => {
     res.status(201);
     res.set('Content-Type', 'text/plain');
