@@ -9,12 +9,17 @@ import checkContentTypeIsJson from './middlewares/check-content-type-is-json';
 import errorHandler from './middlewares/error-handler';
 
 import ValidationError from './validators/errors/validation-error';
+import createUserValidator from './validators/users/create';
 import injectHandlerDependencies from './utils/inject-handler-dependencies';
 import createUserHandler from './handlers/users/create';
 import createUserEngine from './engines/users/create';
 
 const handlerToEngineMap = new Map([
   [createUserHandler, createUserEngine],
+]);
+
+const handlerToValidatorMap = new Map([
+  [createUserHandler, createUserValidator],
 ]);
 
 const client = new elasticsearch.Client({
@@ -27,7 +32,7 @@ app.use(checkContentTypeIsSet);
 app.use(checkContentTypeIsJson);
 app.use(bodyParser.json({ limit: 1e6 }));
 
-app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerToEngineMap, ValidationError));
+app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 
 app.use(errorHandler);
 

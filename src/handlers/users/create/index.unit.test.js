@@ -26,27 +26,30 @@ describe('createUser', function () {
 
   let res;
   let create;
+  let validator;
+
   beforeEach(function () {
     res = generateResMock();
   });
   describe('When invoked', function () {
     beforeEach(function () {
       create = generateCreateStubs.success();
-      return createUser(req, res, db, create, ValidationError);
+      validator = {};
+      return createUser(req, res, db, create, validator, ValidationError);
     });
     describe('should call the create engine function', function () {
       it('once', function () {
         assert(create.calledOnce);
       });
       it('with req, db', function () {
-        assert(create.calledWithExactly(req, db));
+        assert(create.calledWithExactly(req, db, validator, ValidationError));
       });
     });
   });
   describe("When create resolves with the new user's ID", function () {
     beforeEach(function () {
       create = generateCreateStubs.success();
-      return createUser(req, res, db, create, ValidationError);
+      return createUser(req, res, db, create, validator, ValidationError);
     });
     describe('should call res.status()', function () {
       it('once', function () {
@@ -78,7 +81,7 @@ describe('createUser', function () {
   describe('When create rejects with an instance of ValidationError', function () {
     beforeEach(function () {
       create = generateCreateStubs.validationError();
-      return createUser(req, res, db, create, ValidationError);
+      return createUser(req, res, db, create, validator, ValidationError);
     });
     describe('should call res.status()', function () {
       it('once', function () {
