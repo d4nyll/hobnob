@@ -9,7 +9,7 @@ function createUser(req, res, db, create, validator, ValidationError) {
       res.set('Content-Type', 'application/json');
       return res.json({ message: err.message });
     }
-    return undefined;
+    throw err;
   }).catch(() => {
     res.status(500);
     res.set('Content-Type', 'application/json');
