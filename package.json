@@ -10,10 +10,14 @@
     "precommit": "yarn run lint",
     "serve": "yarn run build && dotenv -e envs/.env node dist/index.js",
     "test": "yarn run test:unit && yarn run test:integration && yarn run test:e2e",
+    "test:serve": "dotenv -e envs/test.env -e envs/.env babel-node src/index.js",
+    "test:coverage": "nyc --reporter=html --reporter=text yarn run test",
     "test:unit": "mocha 'src/**/*.unit.test.js' --require @babel/register",
     "test:unit:coverage": "nyc --reporter=html --reporter=text yarn run test:unit",
     "test:integration": "dotenv -e envs/test.env -e envs/.env mocha -- 'src/**/*.integration.test.js' --require @babel/register",
+    "test:integration:coverage": "nyc --reporter=html --reporter=text yarn run test:integration",
     "test:e2e": "dotenv -e envs/test.env -e envs/.env ./scripts/e2e.test.sh",
+    "test:e2e:coverage": "nyc --reporter=html --reporter=text yarn run test:e2e",
     "watch": "nodemon -w src --exec yarn run serve"
   },
   "repository": {
