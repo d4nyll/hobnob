@@ -9,8 +9,9 @@
     "lint": "eslint src",
     "precommit": "yarn run lint",
     "serve": "yarn run build && dotenv -e envs/.env node dist/index.js",
-    "test": "yarn run test:unit && yarn run test:e2e",
-    "test:unit": "mocha 'src/**/*.test.js' --require @babel/register",
+    "test": "yarn run test:unit && yarn run test:integration && yarn run test:e2e",
+    "test:unit": "mocha 'src/**/*.unit.test.js' --require @babel/register",
+    "test:integration": "dotenv -e envs/test.env -e envs/.env mocha -- 'src/**/*.integration.test.js' --require @babel/register",
     "test:e2e": "dotenv -e envs/test.env -e envs/.env ./scripts/e2e.test.sh",
     "watch": "nodemon -w src --exec yarn run serve"
   },
