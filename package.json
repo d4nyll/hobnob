@@ -4,12 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist && babel src -d dist",
+    "build": "rimraf dist && babel src -d dist --copy-files",
     "fix": "eslint src --fix",
     "lint": "eslint src",
     "precommit": "yarn run lint",
-    "serve": "yarn run build && node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "yarn run build && dotenv -e envs/.env node dist/index.js",
+    "test": "yarn run test:unit && yarn run test:integration && yarn run test:e2e",
+    "test:serve": "dotenv -e envs/test.env -e envs/.env babel-node src/index.js",
+    "test:coverage": "nyc --reporter=html --reporter=text yarn run test",
+    "test:unit": "mocha 'src/**/*.unit.test.js' --require @babel/register",
+    "test:unit:coverage": "nyc --reporter=html --reporter=text yarn run test:unit",
+    "test:integration": "dotenv -e envs/test.env -e envs/.env mocha -- 'src/**/*.integration.test.js' --require @babel/register",
+    "test:integration:coverage": "nyc --reporter=html --reporter=text yarn run test:integration",
+    "test:e2e": "dotenv -e envs/test.env -e envs/.env ./scripts/e2e.test.sh",
+    "test:e2e:coverage": "nyc --reporter=html --reporter=text yarn run test:e2e",
     "watch": "nodemon -w src --exec yarn run serve"
   },
   "repository": {
@@ -27,14 +35,27 @@
     "@babel/core": "^7.0.0",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "cucumber": "^4.2.1",
+    "dotenv-cli": "^1.4.0",
     "eslint": "^5.5.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "husky": "^0.14.3",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.isequal": "^4.5.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.4",
-    "rimraf": "^2.6.2"
+    "nyc": "^13.0.1",
+    "rimraf": "^2.6.2",
+    "sinon": "^6.2.0",
+    "superagent": "^3.8.3"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0"
+    "@babel/polyfill": "^7.0.0",
+    "ajv": "^6.5.3",
+    "body-parser": "^1.18.3",
+    "elasticsearch": "^15.1.1",
+    "express": "^4.16.3"
   }
 }

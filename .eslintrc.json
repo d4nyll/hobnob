@@ -1,3 +1,18 @@
 {
-    "extends": "airbnb-base"
+    "extends": "airbnb-base",
+    "rules": {
+        "no-underscore-dangle": "off"
+    },
+    "overrides": [
+        {
+            "files": ["*.test.js"],
+            "env": {
+                "mocha": true
+            },
+            "rules": {
+                "func-names": "off",
+                "prefer-arrow-callback": "off"
+            }
+        }
+    ]
 }
