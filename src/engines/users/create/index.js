@@ -7,7 +7,7 @@ function create(req, db, validator, ValidationError) {
     index: process.env.ELASTICSEARCH_INDEX,
     type: 'user',
     body: req.body,
-  });
+  }).then(result => result._id);
 }
 
 export default create;

@@ -7,7 +7,7 @@ const VALIDATION_ERROR_MESSAGE = 'VALIDATION_ERROR_MESSAGE';
 const USER_ID = 'USER_ID';
 
 const generateCreateStubs = {
-  success: () => stub().resolves({ _id: USER_ID }),
+  success: () => stub().resolves(USER_ID),
   genericError: () => stub().rejects(new Error()),
   validationError: () => stub().rejects(new ValidationError(VALIDATION_ERROR_MESSAGE)),
 };

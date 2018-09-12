@@ -3,11 +3,13 @@ import { stub } from 'sinon';
 import ValidationError from '../../../validators/errors/validation-error';
 import create from '.';
 
-describe('User Create Engine', function () {
+const NEW_USER_ID = 'NEW_USER_ID';
+
+describe('Engine - User - Create', function () {
   let req;
   let db;
   let validator;
-  const dbIndexResult = {};
+  const dbIndexResult = { _id: NEW_USER_ID };
   beforeEach(function () {
     req = {};
     db = {
@@ -29,8 +31,8 @@ describe('User Create Engine', function () {
         assert(validator.calledWithExactly(req));
       });
     });
-    it('should relay the promise returned by db.index()', function () {
-      promise.then(res => assert.strictEqual(res, dbIndexResult));
+    it('should resolve with the _id property extracted from the result of db.index()', function () {
+      return promise.then(res => assert.strictEqual(res, dbIndexResult._id));
     });
   });
 
