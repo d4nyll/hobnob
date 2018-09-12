@@ -2,6 +2,7 @@ import assert from 'assert';
 import superagent from 'superagent';
 import { When, Then } from 'cucumber';
 import elasticsearch from 'elasticsearch';
+import objectPath from 'object-path';
 
 import { getValidPayload, convertStringToArray } from './utils';
 
@@ -44,6 +45,10 @@ When(/^sends the request$/, function (callback) {
 
 Then(/^our API should respond with a ([1-5]\d{2}) HTTP status code$/, function (statusCode) {
   assert.equal(this.response.statusCode, statusCode);
+});
+
+When(/^saves the response text in the context under ([\w.]+)$/, function (contextPath) {
+  objectPath.set(this, contextPath, this.response.text);
 });
 
 Then(/^the payload of the response should be an? ([a-zA-Z0-9, ]+)$/, function (payloadType) {
@@ -140,15 +145,15 @@ Then(/^the payload object should be added to the database, grouped under the "([
   }).catch(callback);
 });
 
-Then('the newly-created user should be deleted', function (callback) {
-  client.delete({
+Then(/^the entity of type (\w+), with ID stored under ([\w.]+), should be deleted$/, function (type, idPath) {
+  return client.delete({
     index: process.env.ELASTICSEARCH_INDEX,
-    type: this.type,
-    id: this.responsePayload,
-  }).then(function (res) {
+    type,
+    id: objectPath.get(this, idPath),
+    refresh: 'true',
+  }).then((res) => {
     assert.equal(res.result, 'deleted');
-    callback();
-  }).catch(callback);
+  });
 });
 
 When(/^attaches (.+) as the payload$/, function (payload) {
