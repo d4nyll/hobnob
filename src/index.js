@@ -36,7 +36,12 @@ app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerT
 
 app.use(errorHandler);
 
-app.listen(process.env.SERVER_PORT, () => {
+app.listen(process.env.SERVER_PORT, async () => {
+  const indexParams = { index: process.env.ELASTICSEARCH_INDEX };
+  const indexExists = await client.indices.exists(indexParams);
+  if (!indexExists) {
+    await client.indices.create(indexParams);
+  }
   // eslint-disable-next-line no-console
   console.log(`Hobnob API server listening on port ${process.env.SERVER_PORT}!`);
 });
