@@ -7,7 +7,7 @@ Feature: Create User
   Scenario Outline: Bad Client Requests
 
   If the client sends a POST request to /users with an empty payload, it
-  should receive a response with a 400 Bad Request HTTP status code.
+  should receive a response with a 4xx HTTP status code.
 
     When the client creates a POST request to /users
     And attaches a generic <payloadType> payload
