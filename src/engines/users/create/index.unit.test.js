@@ -1,19 +1,18 @@
 import assert from 'assert';
 import { stub } from 'sinon';
 import ValidationError from '../../../validators/errors/validation-error';
-import create from '.';
+import generateESClientIndexStub, { INDEX_RESOLVE_ID } from '../../../tests/stubs/elasticsearch/client/index';
 
-const NEW_USER_ID = 'NEW_USER_ID';
+import create from '.';
 
 describe('Engine - User - Create', function () {
   let req;
   let db;
   let validator;
-  const dbIndexResult = { _id: NEW_USER_ID };
   beforeEach(function () {
     req = {};
     db = {
-      index: stub().resolves(dbIndexResult),
+      index: generateESClientIndexStub.success(),
     };
   });
   describe('When invoked and validator returns with undefined', function () {
@@ -32,7 +31,7 @@ describe('Engine - User - Create', function () {
       });
     });
     it('should resolve with the _id property extracted from the result of db.index()', function () {
-      return promise.then(res => assert.strictEqual(res, dbIndexResult._id));
+      return promise.then(res => assert.strictEqual(res, INDEX_RESOLVE_ID));
     });
   });
 
