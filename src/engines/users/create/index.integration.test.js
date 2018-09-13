@@ -12,7 +12,7 @@ describe('Engine - User - Create', function () {
   describe('When invoked with invalid req', function () {
     it('should return promise that rejects with an instance of ValidationError', function () {
       const req = {};
-      create(req, db, createUserValidator, ValidationError)
+      return create(req, db, createUserValidator, ValidationError)
         .catch(err => assert(err instanceof ValidationError));
     });
   });
@@ -25,10 +25,9 @@ describe('Engine - User - Create', function () {
           profile: {},
         },
       };
-      create(req, db, createUserValidator, ValidationError)
+      return create(req, db, createUserValidator, ValidationError)
         .then((result) => {
-          assert.equal(result.result, 'created');
-          assert.equal(typeof result._id, 'string');
+          assert.equal(typeof result, 'string');
         });
     });
   });
