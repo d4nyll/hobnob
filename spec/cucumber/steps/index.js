@@ -31,15 +31,13 @@ When(/^attaches a generic (.+) payload$/, function (payloadType) {
   }
 });
 
-When(/^sends the request$/, function (callback) {
-  this.request
+When(/^sends the request$/, function () {
+  return this.request
     .then((response) => {
       this.response = response.res;
-      callback();
     })
     .catch((error) => {
       this.response = error.response;
-      callback();
     });
 });
 
@@ -133,16 +131,17 @@ When(/^attaches a valid (.+) payload$/, function (payloadType) {
     .set('Content-Type', 'application/json');
 });
 
-Then(/^the payload object should be added to the database, grouped under the "([a-zA-Z]+)" type$/, function (type, callback) {
+Then(/^the payload object should be added to the database, grouped under the "([a-zA-Z]+)" type$/, function (type) {
   this.type = type;
-  client.get({
+  return client.get({
     index: process.env.ELASTICSEARCH_INDEX,
     type,
     id: this.responsePayload,
   }).then((result) => {
     assert.deepEqual(result._source, this.requestPayload);
-    callback();
-  }).catch(callback);
+  });
+});
+
 });
 
 Then(/^the entity of type (\w+), with ID stored under ([\w.]+), should be deleted$/, function (type, idPath) {
