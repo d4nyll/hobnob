@@ -1,5 +1,6 @@
 import assert from 'assert';
 import { spy, stub } from 'sinon';
+import generateResSpy from '../../../tests/spies/res';
 import ValidationError from '../../../validators/errors/validation-error';
 import createUser from '.';
 
@@ -12,15 +13,6 @@ const generateCreateStubs = {
   validationError: () => stub().rejects(new ValidationError(VALIDATION_ERROR_MESSAGE)),
 };
 
-function generateResMock() {
-  return {
-    status: spy(),
-    set: spy(),
-    json: spy(),
-    send: spy(),
-  };
-}
-
 describe('createUser', function () {
   const db = {};
   const req = {};
@@ -30,7 +22,7 @@ describe('createUser', function () {
   let validator;
 
   beforeEach(function () {
-    res = generateResMock();
+    res = generateResSpy();
   });
   describe('When invoked', function () {
     beforeEach(function () {
