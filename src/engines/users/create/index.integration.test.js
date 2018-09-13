@@ -8,7 +8,7 @@ const db = new elasticsearch.Client({
   host: `${process.env.ELASTICSEARCH_PROTOCOL}://${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`,
 });
 
-describe('User Create Engine', function () {
+describe('Engine - User - Create', function () {
   describe('When invoked with invalid req', function () {
     it('should return promise that rejects with an instance of ValidationError', function () {
       const req = {};
