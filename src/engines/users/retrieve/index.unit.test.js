@@ -36,7 +36,7 @@ describe('Engine - User - Retrieve', function () {
       promise = retrieve(req, db);
     });
     it('should return with a promise that resolves to an object', function () {
-      promise.then(res => assert(typeof res === 'object'));
+      return promise.then(res => assert(typeof res === 'object'));
     });
   });
   describe('When the client.get operation is unsuccessful', function () {
@@ -48,10 +48,10 @@ describe('Engine - User - Retrieve', function () {
         promise = retrieve(req, db);
       });
       it('should return with a promise that rejects with an Error object', function () {
-        promise.catch(error => assert(error instanceof Error));
+        return promise.catch(error => assert(error instanceof Error));
       });
       it("which has a message property set to 'Not Found'", function () {
-        promise.catch(error => assert.equal(error.message, 'Not Found'));
+        return promise.catch(error => assert.equal(error.message, 'Not Found'));
       });
     });
     describe('Because of other errors', function () {
@@ -62,10 +62,10 @@ describe('Engine - User - Retrieve', function () {
         promise = retrieve(req, db);
       });
       it('should return with a promise that rejects with an Error object', function () {
-        promise.catch(error => assert(error instanceof Error));
+        return promise.catch(error => assert(error instanceof Error));
       });
       it("which has a message property set to 'Internal Server Error'", function () {
-        promise.catch(error => assert.equal(error.message, 'Internal Server Error'));
+        return promise.catch(error => assert.equal(error.message, 'Internal Server Error'));
       });
     });
   });

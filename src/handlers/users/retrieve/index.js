@@ -1,5 +1,5 @@
-function retrieveUser(req, res, db, retrieve) {
-  return retrieve(req, db).then((result) => {
+function retrieveUser(req, res, db, engine) {
+  return engine(req, db).then((result) => {
     res.status(200);
     res.set('Content-Type', 'application/json');
     return res.send(result);

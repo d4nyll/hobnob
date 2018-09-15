@@ -23,10 +23,10 @@ describe('Engine - User - Retrieve', function () {
       promise = retrieve(req, db);
     });
     it('should return with a promise that rejects with an Error object', function () {
-      promise.catch(err => assert(err instanceof Error));
+      return promise.catch(err => assert(err instanceof Error));
     });
     it("that has the mesage 'Not Found'", function () {
-      promise.catch(err => assert.equal(err.message, 'Not Found'));
+      return promise.catch(err => assert.equal(err.message, 'Not Found'));
     });
   });
   describe('When the user exists', function () {
