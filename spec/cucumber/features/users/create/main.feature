@@ -82,7 +82,7 @@ Feature: Create User
 
   Scenario Outline: Invalid Profile
 
-    When the client creates a POST request to /users/
+    When the client creates a POST request to /users
     And attaches <payload> as the payload
     And sends the request
     Then our API should respond with a 400 HTTP status code

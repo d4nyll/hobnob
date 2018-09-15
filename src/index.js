@@ -15,14 +15,17 @@ import injectHandlerDependencies from './utils/inject-handler-dependencies';
 // Handlers
 import createUserHandler from './handlers/users/create';
 import retrieveUserHandler from './handlers/users/retrieve';
+import deleteUserHandler from './handlers/users/delete';
 
 // Engines
 import createUserEngine from './engines/users/create';
 import retrieveUserEngine from './engines/users/retrieve';
+import deleteUserEngine from './engines/users/delete';
 
 const handlerToEngineMap = new Map([
   [createUserHandler, createUserEngine],
   [retrieveUserHandler, retrieveUserEngine],
+  [deleteUserHandler, deleteUserEngine],
 ]);
 
 const handlerToValidatorMap = new Map([
@@ -41,6 +44,7 @@ app.use(bodyParser.json({ limit: 1e6 }));
 
 app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.get('/users/:userId', injectHandlerDependencies(retrieveUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
+app.delete('/users/:userId', injectHandlerDependencies(deleteUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 
 app.use(errorHandler);
 
