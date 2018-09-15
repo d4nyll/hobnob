@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { spy, stub } from 'sinon';
+import { stub } from 'sinon';
 import generateResSpy from '../../../tests/spies/res';
 import ValidationError from '../../../validators/errors/validation-error';
 import createUser from '.';

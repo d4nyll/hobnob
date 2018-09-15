@@ -143,11 +143,8 @@ Then(/^the payload object should be added to the database, grouped under the "([
   });
 });
 
-Then(/^the ([\w.]+) property of the response should be the same as context\.([\w.]+) but without the ([\w.]+) fields?$/, function (responseProperty, contextProperty, missingFields) {
-  const contextObject = objectPath.get(this, contextProperty);
-  const fieldsToDelete = convertStringToArray(missingFields);
-  fieldsToDelete.forEach(field => delete contextObject[field]);
-  assert.deepEqual(objectPath.get(this.responsePayload, (responseProperty === 'root' ? '' : responseProperty)), contextObject);
+Then(/^the ([\w.]+) property of the response should be the same as context\.([\w.]+)$/, function (responseProperty, contextProperty) {
+  assert.deepEqual(objectPath.get(this.responsePayload, (responseProperty === 'root' ? '' : responseProperty)), objectPath.get(this, contextProperty));
 });
 
 Then(/^the entity of type (\w+), with ID stored under ([\w.]+), should be deleted$/, function (type, idPath) {

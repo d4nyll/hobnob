@@ -11,11 +11,18 @@ import errorHandler from './middlewares/error-handler';
 import ValidationError from './validators/errors/validation-error';
 import createUserValidator from './validators/users/create';
 import injectHandlerDependencies from './utils/inject-handler-dependencies';
+
+// Handlers
 import createUserHandler from './handlers/users/create';
+import retrieveUserHandler from './handlers/users/retrieve';
+
+// Engines
 import createUserEngine from './engines/users/create';
+import retrieveUserEngine from './engines/users/retrieve';
 
 const handlerToEngineMap = new Map([
   [createUserHandler, createUserEngine],
+  [retrieveUserHandler, retrieveUserEngine],
 ]);
 
 const handlerToValidatorMap = new Map([
@@ -33,6 +40,7 @@ app.use(checkContentTypeIsJson);
 app.use(bodyParser.json({ limit: 1e6 }));
 
 app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
+app.get('/users/:userId', injectHandlerDependencies(retrieveUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 
 app.use(errorHandler);
 
