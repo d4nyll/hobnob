@@ -4,14 +4,15 @@ import { When, Then } from 'cucumber';
 import elasticsearch from 'elasticsearch';
 import objectPath from 'object-path';
 
-import { getValidPayload, convertStringToArray } from './utils';
+import { processPath, getValidPayload, convertStringToArray } from './utils';
 
 const client = new elasticsearch.Client({
   host: `${process.env.ELASTICSEARCH_PROTOCOL}://${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`,
 });
 
 When(/^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([/\w-:.]+)$/, function (method, path) {
-  this.request = superagent(method, `${process.env.SERVER_HOSTNAME}:${process.env.SERVER_PORT}${path}`);
+  const processedPath = processPath(this, path);
+  this.request = superagent(method, `${process.env.SERVER_HOSTNAME}:${process.env.SERVER_PORT}${processedPath}`);
 });
 
 When(/^attaches a generic (.+) payload$/, function (payloadType) {
@@ -142,6 +143,11 @@ Then(/^the payload object should be added to the database, grouped under the "([
   });
 });
 
+Then(/^the ([\w.]+) property of the response should be the same as context\.([\w.]+) but without the ([\w.]+) fields?$/, function (responseProperty, contextProperty, missingFields) {
+  const contextObject = objectPath.get(this, contextProperty);
+  const fieldsToDelete = convertStringToArray(missingFields);
+  fieldsToDelete.forEach(field => delete contextObject[field]);
+  assert.deepEqual(objectPath.get(this.responsePayload, (responseProperty === 'root' ? '' : responseProperty)), contextObject);
 });
 
 Then(/^the entity of type (\w+), with ID stored under ([\w.]+), should be deleted$/, function (type, idPath) {
