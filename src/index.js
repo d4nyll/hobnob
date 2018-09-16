@@ -8,28 +8,35 @@ import checkContentTypeIsSet from './middlewares/check-content-type-is-set';
 import checkContentTypeIsJson from './middlewares/check-content-type-is-json';
 import errorHandler from './middlewares/error-handler';
 
-import ValidationError from './validators/errors/validation-error';
-import createUserValidator from './validators/users/create';
 import injectHandlerDependencies from './utils/inject-handler-dependencies';
+import ValidationError from './validators/errors/validation-error';
+
+// Validators
+import createUserValidator from './validators/users/create';
+import replaceProfileValidator from './validators/profile/replace';
 
 // Handlers
 import createUserHandler from './handlers/users/create';
 import retrieveUserHandler from './handlers/users/retrieve';
 import deleteUserHandler from './handlers/users/delete';
+import replaceProfileHandler from './handlers/profile/replace';
 
 // Engines
 import createUserEngine from './engines/users/create';
 import retrieveUserEngine from './engines/users/retrieve';
 import deleteUserEngine from './engines/users/delete';
+import replaceProfileEngine from './engines/profile/replace';
 
 const handlerToEngineMap = new Map([
   [createUserHandler, createUserEngine],
   [retrieveUserHandler, retrieveUserEngine],
   [deleteUserHandler, deleteUserEngine],
+  [replaceProfileHandler, replaceProfileEngine],
 ]);
 
 const handlerToValidatorMap = new Map([
   [createUserHandler, createUserValidator],
+  [replaceProfileHandler, replaceProfileValidator],
 ]);
 
 const client = new elasticsearch.Client({
@@ -45,6 +52,7 @@ app.use(bodyParser.json({ limit: 1e6 }));
 app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.get('/users/:userId', injectHandlerDependencies(retrieveUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.delete('/users/:userId', injectHandlerDependencies(deleteUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
+app.put('/users/:userId/profile', injectHandlerDependencies(replaceProfileHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 
 app.use(errorHandler);
 

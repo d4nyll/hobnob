@@ -1,12 +1,16 @@
 import objectPath from 'object-path';
 
-function getValidPayload(type) {
+function getValidPayload(type, context = {}) {
   const lowercaseType = type.toLowerCase();
   switch (lowercaseType) {
     case 'create user':
       return {
         email: 'e@ma.il',
         password: 'password',
+      };
+    case 'replace user profile':
+      return {
+        summary: context.summary || 'foo',
       };
     default:
       return undefined;
