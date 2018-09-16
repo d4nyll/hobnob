@@ -62,7 +62,7 @@ app.patch('/users/:userId/profile', injectHandlerDependencies(updateProfileHandl
 
 app.use(errorHandler);
 
-app.listen(process.env.SERVER_PORT, async () => {
+const server = app.listen(process.env.SERVER_PORT, async () => {
   const indexParams = { index: process.env.ELASTICSEARCH_INDEX };
   const indexExists = await client.indices.exists(indexParams);
   if (!indexExists) {
@@ -70,4 +70,10 @@ app.listen(process.env.SERVER_PORT, async () => {
   }
   // eslint-disable-next-line no-console
   console.log(`Hobnob API server listening on port ${process.env.SERVER_PORT}!`);
+});
+
+process.on('SIGTERM', () => {
+  server.close(() => {
+    process.exit(0);
+  });
 });
