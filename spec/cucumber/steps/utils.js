@@ -12,6 +12,12 @@ function getValidPayload(type, context = {}) {
       return {
         summary: context.summary || 'foo',
       };
+    case 'update user profile':
+      return {
+        name: context.name || {
+          middle: 'd4nyll',
+        },
+      };
     default:
       return undefined;
   }

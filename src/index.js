@@ -14,29 +14,34 @@ import ValidationError from './validators/errors/validation-error';
 // Validators
 import createUserValidator from './validators/users/create';
 import replaceProfileValidator from './validators/profile/replace';
+import updateProfileValidator from './validators/profile/update';
 
 // Handlers
 import createUserHandler from './handlers/users/create';
 import retrieveUserHandler from './handlers/users/retrieve';
 import deleteUserHandler from './handlers/users/delete';
 import replaceProfileHandler from './handlers/profile/replace';
+import updateProfileHandler from './handlers/profile/update';
 
 // Engines
 import createUserEngine from './engines/users/create';
 import retrieveUserEngine from './engines/users/retrieve';
 import deleteUserEngine from './engines/users/delete';
 import replaceProfileEngine from './engines/profile/replace';
+import updateProfileEngine from './engines/profile/update';
 
 const handlerToEngineMap = new Map([
   [createUserHandler, createUserEngine],
   [retrieveUserHandler, retrieveUserEngine],
   [deleteUserHandler, deleteUserEngine],
   [replaceProfileHandler, replaceProfileEngine],
+  [updateProfileHandler, updateProfileEngine],
 ]);
 
 const handlerToValidatorMap = new Map([
   [createUserHandler, createUserValidator],
   [replaceProfileHandler, replaceProfileValidator],
+  [updateProfileHandler, updateProfileValidator],
 ]);
 
 const client = new elasticsearch.Client({
@@ -53,6 +58,7 @@ app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerT
 app.get('/users/:userId', injectHandlerDependencies(retrieveUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.delete('/users/:userId', injectHandlerDependencies(deleteUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.put('/users/:userId/profile', injectHandlerDependencies(replaceProfileHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
+app.patch('/users/:userId/profile', injectHandlerDependencies(updateProfileHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 
 app.use(errorHandler);
 
