@@ -1,6 +1,7 @@
 import assert from 'assert';
+import jsonfile from 'jsonfile';
 import superagent from 'superagent';
-import { When, Then } from 'cucumber';
+import { When, Then, Given } from 'cucumber';
 import elasticsearch from 'elasticsearch';
 import objectPath from 'object-path';
 
@@ -8,6 +9,53 @@ import { processPath, getValidPayload, convertStringToArray } from './utils';
 
 const client = new elasticsearch.Client({
   host: `${process.env.ELASTICSEARCH_PROTOCOL}://${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`,
+});
+
+
+Given(/^all documents of type (?:"|')([\w-]+)(?:"|') are deleted$/, function (type) {
+  return client.deleteByQuery({
+    index: process.env.ELASTICSEARCH_INDEX,
+    type,
+    body: {
+      query: {
+        match_all: {},
+      },
+    },
+    conflicts: 'proceed',
+    refresh: true,
+  });
+});
+
+Given(/^(\d+|all) documents in the (?:"|')([\w-]+)(?:"|') sample are added to the index with type (?:"|')([\w-]+)(?:"|')?/, function (count, sourceFile, type) {
+  const numericCount = Number.isNaN(parseInt(count, 10)) ? Infinity : parseInt(count, 10);
+  if (numericCount < 1) {
+    return;
+  }
+
+  // Get the data
+  // Note that we could also have used the `require` syntax
+  const source = jsonfile.readFileSync(`${__dirname}/../sample-data/${sourceFile}.json`);
+
+  // Map the data to an array of objects as expected by Elasticsearch's API
+  const action = {
+    index: {
+      _index: process.env.ELASTICSEARCH_INDEX,
+      _type: type,
+    },
+  };
+  const operations = [];
+  const len = source.length;
+  for (let i = 0; i < len && i < numericCount; i += 1) {
+    operations.push(action);
+    operations.push(source[i]);
+  }
+
+  // Do a bulk index
+  // refreshing the index to make sure it is immediately searchable in subsequent steps
+  return client.bulk({
+    body: operations,
+    refresh: 'true',
+  });
 });
 
 When(/^the client creates a (GET|POST|PATCH|PUT|DELETE|OPTIONS|HEAD) request to ([/\w-:.]+)$/, function (method, path) {
@@ -32,6 +80,11 @@ When(/^attaches a generic (.+) payload$/, function (payloadType) {
   }
 });
 
+When(/^set (?:"|')(.+)(?:"|') as a query parameter$/, function (queryString) {
+  return this.request
+    .query(queryString);
+});
+
 When(/^sends the request$/, function () {
   return this.request
     .then((response) => {
@@ -52,7 +105,9 @@ When(/^saves the response text in the context under ([\w.]+)$/, function (contex
 
 Then(/^the payload of the response should be an? ([a-zA-Z0-9, ]+)$/, function (payloadType) {
   const contentType = this.response.headers['Content-Type'] || this.response.headers['content-type'];
-  if (payloadType === 'JSON object') {
+  if (payloadType === 'JSON object'
+      || payloadType === 'array'
+  ) {
     // Check Content-Type header
     if (!contentType || !contentType.includes('application/json')) {
       throw new Error('Response not of Content-Type application/json');
@@ -190,4 +245,12 @@ When(/^attaches an? (.+) payload which has the additional ([a-zA-Z0-9, ]+) field
   this.request
     .send(JSON.stringify(this.requestPayload))
     .set('Content-Type', 'application/json');
+});
+
+Then(/^the first item of the response should have property ([\w.]+) set to (.+)$/, function (path, value) {
+  assert.equal(objectPath.get(this.responsePayload[0], path), value);
+});
+
+Then(/^the response should contain (\d+) items$/, function (count) {
+  assert.equal(this.responsePayload.length, count);
 });
