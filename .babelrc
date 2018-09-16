@@ -5,5 +5,10 @@
         "node": "current"
       }
     }]
-  ]
+  ],
+  "env": {
+    "debug": {
+      "retainLines": true
+    }
+  }
 }
