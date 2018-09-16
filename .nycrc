@@ -9,6 +9,7 @@
     "**/node_modules/**",
     "dist/",
     "spec/",
-    "src/**/*.test.js"
+    "src/**/*.test.js",
+    "src/tests/**"
   ]
 }
