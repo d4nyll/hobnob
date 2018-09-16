@@ -13,7 +13,7 @@ describe('Engine - User - Retrieve', function () {
   let db;
   let promise;
   describe('When invoked', function () {
-    before(function () {
+    beforeEach(function () {
       db = {
         get: generateESClientGetStub.success(),
       };
