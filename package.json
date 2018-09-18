@@ -6,6 +6,7 @@
   "scripts": {
     "build": "rimraf dist && babel src -d dist --copy-files",
     "dev:serve": "yarn run build && dotenv -e envs/.env node dist/index.js",
+    "dev:test": "yarn run test:unit && yarn run test:integration && yarn run test:e2e:prepare && yarn run test:e2e",
     "dev:watch": "nodemon -w src --exec yarn run serve",
     "fix": "eslint src --fix",
     "lint": "eslint src",
@@ -19,6 +20,7 @@
     "test:integration": "dotenv -e envs/test.env -e envs/.env mocha -- 'src/**/*.integration.test.js' --require @babel/register",
     "test:integration:coverage": "nyc --reporter=html --reporter=text yarn run test:integration",
     "test:e2e": "dotenv -e envs/test.env -e envs/.env ./scripts/e2e.test.sh",
+    "test:e2e:prepare": "dotenv -e envs/test.env -e envs/.env ./scripts/e2e.prepare.sh",
     "test:e2e:coverage": "nyc --reporter=html --reporter=text yarn run test:e2e"
   },
   "repository": {
