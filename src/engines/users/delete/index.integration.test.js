@@ -5,7 +5,7 @@ import del from '.';
 const USER_ID = 'TEST_USER_ID';
 const USER_OBJ = {
   email: 'e@ma.il',
-  password: 'hunter2',
+  digest: '$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy',
 };
 
 const db = new elasticsearch.Client({

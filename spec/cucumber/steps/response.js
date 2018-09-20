@@ -2,6 +2,7 @@ import assert from 'assert';
 import { When, Then } from 'cucumber';
 import elasticsearch from 'elasticsearch';
 import objectPath from 'object-path';
+import { convertStringToArray } from './utils';
 
 const client = new elasticsearch.Client({
   host: `${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`,
@@ -62,6 +63,13 @@ Then(/^the payload object should be added to the database, grouped under the "([
 
 Then(/^the ([\w.]+) property of the response should be the same as context\.([\w.]+)$/, function (responseProperty, contextProperty) {
   assert.deepEqual(objectPath.get(this.responsePayload, (responseProperty === 'root' ? '' : responseProperty)), objectPath.get(this, contextProperty));
+});
+
+Then(/^the ([\w.]+) property of the response should be the same as context\.([\w.]+) but without the ([\w.]+) fields?$/, function (responseProperty, contextProperty, missingFields) {
+  const contextObject = objectPath.get(this, contextProperty);
+  const fieldsToDelete = convertStringToArray(missingFields);
+  fieldsToDelete.forEach(field => delete contextObject[field]);
+  assert.deepEqual(objectPath.get(this.responsePayload, (responseProperty === 'root' ? '' : responseProperty)), contextObject);
 });
 
 Then(/^the ([\w.]+) property of the response should be an? ([\w.]+) with the value (.+)$/, function (responseProperty, expectedResponseType, expectedResponse) {

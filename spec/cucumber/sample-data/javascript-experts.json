@@ -1,7 +1,7 @@
 [
   {
     "email": "yyx990803@gmail.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Evan",
@@ -14,7 +14,7 @@
   },
   {
     "email": "dan.abramov@me.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Dan",
@@ -27,7 +27,7 @@
   },
   {
     "email": "tj@apex.sh",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "TJ",
@@ -40,7 +40,7 @@
   },
   {
     "email": "ariya.hidayat@gmail.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Ariya",
@@ -53,7 +53,7 @@
   },
   {
     "email": "axel@rauschma.de",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Axel",
@@ -66,7 +66,7 @@
   },
   {
     "email": "tom@tomdale.net",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Tom",
@@ -79,7 +79,7 @@
   },
   {
     "email": "mathias@chromium.org",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Mathias",
@@ -92,7 +92,7 @@
   },
   {
     "email": "john.david.dalton@gmail.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "John-David",
@@ -105,7 +105,7 @@
   },
   {
     "email": "SachaG@users.noreply.github.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Sacha",
@@ -118,7 +118,7 @@
   },
   {
     "email": "david@davidwalsh.name",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "David",
@@ -131,7 +131,7 @@
   },
   {
     "email": "kent@doddsfamily.us",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Kent",
@@ -144,7 +144,7 @@
   },
   {
     "email": "BrendanEich@users.noreply.github.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Brendan",
@@ -157,7 +157,7 @@
   },
   {
     "email": "sindresorhus@gmail.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Sindre",
@@ -170,7 +170,7 @@
   },
   {
     "email": "addyosmani@gmail.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Addy",
@@ -183,7 +183,7 @@
   },
   {
     "email": "jeresig@gmail.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "John",
@@ -196,7 +196,7 @@
   },
   {
     "email": "paul.irish@gmail.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Paul",
@@ -209,7 +209,7 @@
   },
   {
     "email": "chriscoyier@gmail.com",
-    "password": "hunter2",
+    "digest": "$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy",
     "profile": {
       "name": {
         "first": "Chris",

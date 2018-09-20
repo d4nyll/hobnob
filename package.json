@@ -39,6 +39,7 @@
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "bcryptjs": "^2.4.3",
     "chance": "^1.0.16",
     "cucumber": "^4.2.1",
     "dotenv-cli": "^1.4.0",

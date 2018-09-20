@@ -40,7 +40,7 @@ describe('Engine - User - Search', function () {
         assert.deepEqual(db.search.getCall(0).args[0], {
           index: process.env.ELASTICSEARCH_INDEX,
           type: 'user',
-          _sourceExclude: 'password',
+          _sourceExclude: 'digest',
         });
       });
     });
@@ -57,7 +57,7 @@ describe('Engine - User - Search', function () {
             index: process.env.ELASTICSEARCH_INDEX,
             type: 'user',
             q: SEARCH_TERM,
-            _sourceExclude: 'password',
+            _sourceExclude: 'digest',
           });
         });
       });

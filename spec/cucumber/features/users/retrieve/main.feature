@@ -16,5 +16,5 @@ Feature: Retrieve User by ID
     And sends the request
     Then our API should respond with a 200 HTTP status code
     And the payload of the response should be a JSON object
-    And the root property of the response should be the same as context.requestPayload
+    And the root property of the response should be the same as context.requestPayload but without the digest field
     And the entity of type user, with ID stored under userId, should be deleted
