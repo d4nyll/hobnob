@@ -5,10 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "rimraf dist && babel src -d dist --copy-files",
+    "dev:serve": "yarn run build && dotenv -e envs/.env node dist/index.js",
+    "dev:test": "yarn run test:unit && yarn run test:integration && yarn run test:e2e:prepare && yarn run test:e2e",
+    "dev:watch": "nodemon -w src --exec yarn run serve",
     "fix": "eslint src --fix",
     "lint": "eslint src",
     "precommit": "yarn run lint",
-    "serve": "yarn run build && dotenv -e envs/.env node dist/index.js",
+    "serve": "yarn run build && dotenv -e envs/.env pm2 start dist/index.js",
     "test": "yarn run test:unit && yarn run test:integration && yarn run test:e2e",
     "test:serve": "dotenv -e envs/test.env -e envs/.env babel-node src/index.js",
     "test:coverage": "nyc --reporter=html --reporter=text yarn run test",
@@ -17,8 +20,8 @@
     "test:integration": "dotenv -e envs/test.env -e envs/.env mocha -- 'src/**/*.integration.test.js' --require @babel/register",
     "test:integration:coverage": "nyc --reporter=html --reporter=text yarn run test:integration",
     "test:e2e": "dotenv -e envs/test.env -e envs/.env ./scripts/e2e.test.sh",
-    "test:e2e:coverage": "nyc --reporter=html --reporter=text yarn run test:e2e",
-    "watch": "nodemon -w src --exec yarn run serve"
+    "test:e2e:prepare": "dotenv -e envs/test.env -e envs/.env ./scripts/e2e.prepare.sh",
+    "test:e2e:coverage": "nyc --reporter=html --reporter=text yarn run test:e2e"
   },
   "repository": {
     "type": "git",
@@ -50,6 +53,7 @@
     "nodemon": "^1.18.4",
     "nyc": "^13.0.1",
     "object-path": "^0.11.4",
+    "pm2": "^3.1.2",
     "rimraf": "^2.6.2",
     "sinon": "^6.2.0",
     "superagent": "^3.8.3"
