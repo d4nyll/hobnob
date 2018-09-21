@@ -93,3 +93,12 @@ Then(/^the first item of the response should have property ([\w.]+) set to (.+)$
 Then(/^the response should contain (\d+) items$/, function (count) {
   assert.equal(this.responsePayload.length, count);
 });
+
+Then(/^the payload should be equal to context.([\w-]+)$/, function (contextpath) {
+  assert.equal(this.responsePayload, objectPath.get(this, contextpath));
+});
+
+Then(/^the response string should satisfy the regular expression (.+)$/, function (regex) {
+  const re = new RegExp(regex.trim().replace(/^\/|\/$/g, ''));
+  assert.equal(re.test(this.responsePayload), true);
+});

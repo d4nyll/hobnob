@@ -39,7 +39,6 @@
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
-    "bcryptjs": "^2.4.3",
     "chance": "^1.0.16",
     "cucumber": "^4.2.1",
     "dotenv-cli": "^1.4.0",
@@ -62,8 +61,10 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "ajv": "^6.5.3",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "elasticsearch": "^15.1.1",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "random-seed": "^0.3.0"
   }
 }

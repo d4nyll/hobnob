@@ -100,6 +100,12 @@ When(/^set (?:"|')(.+)(?:"|') as a query parameter$/, function (queryString) {
     .query(queryString);
 });
 
+When(/^set a valid (.+) query string$/, function (payloadType) {
+  this.query = getValidPayload(payloadType, this);
+  this.request
+    .query(this.query);
+});
+
 When(/^sends the request$/, function () {
   return this.request
     .then((response) => {

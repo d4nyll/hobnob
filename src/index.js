@@ -2,6 +2,7 @@ import '@babel/polyfill';
 import express from 'express';
 import bodyParser from 'body-parser';
 import elasticsearch from 'elasticsearch';
+import { getSalt } from 'bcryptjs';
 
 import checkEmptyPayload from './middlewares/check-empty-payload';
 import checkContentTypeIsSet from './middlewares/check-content-type-is-set';
@@ -9,6 +10,7 @@ import checkContentTypeIsJson from './middlewares/check-content-type-is-json';
 import errorHandler from './middlewares/error-handler';
 
 import injectHandlerDependencies from './utils/inject-handler-dependencies';
+import generateFakeSalt from './utils/generate-fake-salt';
 import ValidationError from './validators/errors/validation-error';
 
 // Validators
@@ -18,6 +20,7 @@ import replaceProfileValidator from './validators/profile/replace';
 import updateProfileValidator from './validators/profile/update';
 
 // Handlers
+import retrieveSaltHandler from './handlers/auth/salt/retrieve';
 import createUserHandler from './handlers/users/create';
 import retrieveUserHandler from './handlers/users/retrieve';
 import deleteUserHandler from './handlers/users/delete';
@@ -26,6 +29,7 @@ import replaceProfileHandler from './handlers/profile/replace';
 import updateProfileHandler from './handlers/profile/update';
 
 // Engines
+import retrieveSaltEngine from './engines/auth/salt/retrieve';
 import createUserEngine from './engines/users/create';
 import retrieveUserEngine from './engines/users/retrieve';
 import deleteUserEngine from './engines/users/delete';
@@ -34,6 +38,7 @@ import replaceProfileEngine from './engines/profile/replace';
 import updateProfileEngine from './engines/profile/update';
 
 const handlerToEngineMap = new Map([
+  [retrieveSaltHandler, retrieveSaltEngine],
   [createUserHandler, createUserEngine],
   [retrieveUserHandler, retrieveUserEngine],
   [deleteUserHandler, deleteUserEngine],
@@ -59,8 +64,9 @@ app.use(checkContentTypeIsSet);
 app.use(checkContentTypeIsJson);
 app.use(bodyParser.json({ limit: 1e6 }));
 
+app.get('/salt', injectHandlerDependencies(retrieveSaltHandler, client, handlerToEngineMap, handlerToValidatorMap, getSalt, generateFakeSalt));
 app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
-app.get('/users/', injectHandlerDependencies(searchUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
+app.get('/users', injectHandlerDependencies(searchUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.get('/users/:userId', injectHandlerDependencies(retrieveUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.delete('/users/:userId', injectHandlerDependencies(deleteUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.put('/users/:userId/profile', injectHandlerDependencies(replaceProfileHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
