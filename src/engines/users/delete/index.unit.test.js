@@ -7,6 +7,9 @@ const req = {
   params: {
     userId: TEST_USER_ID,
   },
+  user: {
+    id: TEST_USER_ID,
+  },
 };
 let db;
 let promise;

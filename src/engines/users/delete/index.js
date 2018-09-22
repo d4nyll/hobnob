@@ -1,4 +1,7 @@
 function del(req, db) {
+  if (req.params.userId !== req.user.id) {
+    return Promise.reject(new Error('Forbidden'));
+  }
   return db.delete({
     index: process.env.ELASTICSEARCH_INDEX,
     type: 'user',

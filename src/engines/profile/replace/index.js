@@ -1,4 +1,7 @@
 function replace(req, db, validator, ValidationError) {
+  if (req.params.userId !== req.user.id) {
+    return Promise.reject(new Error('Forbidden'));
+  }
   const validationResults = validator(req);
   if (validationResults instanceof ValidationError) {
     return Promise.reject(validationResults);

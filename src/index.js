@@ -8,6 +8,7 @@ import { sign } from 'jsonwebtoken';
 import checkEmptyPayload from './middlewares/check-empty-payload';
 import checkContentTypeIsSet from './middlewares/check-content-type-is-set';
 import checkContentTypeIsJson from './middlewares/check-content-type-is-json';
+import authenticate from './middlewares/authenticate';
 import errorHandler from './middlewares/error-handler';
 
 import injectHandlerDependencies from './utils/inject-handler-dependencies';
@@ -69,6 +70,7 @@ app.use(checkEmptyPayload);
 app.use(checkContentTypeIsSet);
 app.use(checkContentTypeIsJson);
 app.use(bodyParser.json({ limit: 1e6 }));
+app.use(authenticate);
 
 app.get('/salt', injectHandlerDependencies(retrieveSaltHandler, client, handlerToEngineMap, handlerToValidatorMap, getSalt, generateFakeSalt));
 app.post('/login', injectHandlerDependencies(loginHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError, sign));

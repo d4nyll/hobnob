@@ -44,6 +44,9 @@ describe('Engine - Profile - Update', function () {
         params: {
           userId: USER_ID,
         },
+        user: {
+          id: USER_ID,
+        },
       };
     });
     describe('When the user does not exists', function () {

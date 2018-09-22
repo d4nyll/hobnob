@@ -14,6 +14,11 @@ function replace(req, res, db, engine, validator, ValidationError) {
       res.set('Content-Type', 'application/json');
       return res.json({ message: err.message });
     }
+    if (err.message === 'Forbidden') {
+      res.status(403);
+      res.set('Content-Type', 'application/json');
+      return res.json({ message: "Permission Denied. Can only modify your own profile, not other users'." });
+    }
     res.status(500);
     res.set('Content-Type', 'application/json');
     return res.json({ message: 'Internal Server Error' });

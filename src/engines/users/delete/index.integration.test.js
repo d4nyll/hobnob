@@ -15,6 +15,9 @@ const req = {
   params: {
     userId: USER_ID,
   },
+  user: {
+    id: USER_ID,
+  },
 };
 
 describe('Engine - User - Delete', function () {
