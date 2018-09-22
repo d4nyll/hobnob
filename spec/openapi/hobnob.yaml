@@ -77,11 +77,25 @@ components:
       required:
         - email
         - profile
+      example:
+        email: e@ma.il
+        profile:
+          bio: Daniel is a species of JavaScript developer that is commonly found in Hong Kong and London. In 2015, Daniel opened his own digital agency called Brew, which specialized in the Meteor framework.
+          summary: JavaScript Developer
+          name:
+            first: Daniel
+            last: Li
   responses:
     Success:
       description: Success
     Created:
       description: Created
+      content:
+        text/plain:
+          schema:
+            type: string
+    LoginSuccess:
+      description: Logged In Successfully
       content:
         text/plain:
           schema:
@@ -98,6 +112,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UserLimited'
+    UsersRetrieved:
+      description: Users Retrieved from Search Operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/UserLimited'
     ErrorBadRequest:
       description: Bad Request
       content:
@@ -106,6 +128,12 @@ components:
             $ref: '#/components/schemas/Error'
     ErrorUnauthorized:
       description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ErrorForbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
@@ -134,6 +162,34 @@ components:
       scheme: bearer
       bearerFormat: JWT
 paths:
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: Perform password-based authentication
+      description: Returns a JWT upon success
+      requestBody:
+        description: User Credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  format: email
+                digest:
+                  type: string
+                  pattern: ^\\$2[aby]?\\$\\d{1,2}\\$[.\\/A-Za-z0-9]{53}$
+      responses:
+        '200':
+          $ref: '#/components/responses/LoginSuccess'
+        '400':
+          $ref: '#/components/responses/ErrorBadRequest'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '500':
+          $ref: '#/components/responses/ErrorInternalServer'
   /salt:
     get:
       tags:
@@ -141,13 +197,13 @@ paths:
       summary: Returns the salt of an user based on the user's email
       description: Even if there are no users with the specified email, this endpoint will still return with a salt. This is to prevent the API leaking information about which email addresses are used to register on the platform.
       parameters:
-      - name: email
-        in: query
-        description: The email of user to retrieve the salt for
-        required: true
-        schema:
-          type: string
-          format: email
+        - name: email
+          in: query
+          description: The email of user to retrieve the salt for
+          required: true
+          schema:
+            type: string
+            format: email
       responses:
         '200':
           $ref: '#/components/responses/SaltRetrieved'
@@ -156,6 +212,23 @@ paths:
         '500':
           $ref: '#/components/responses/ErrorInternalServer'
   /users:
+    get:
+      tags:
+        - Users
+      summary: Search for a User using query string
+      parameters:
+        - name: query
+          in: query
+          description: The term to query for
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/UsersRetrieved'
+        '400':
+          $ref: '#/components/responses/ErrorBadRequest'
+        '500':
+          $ref: '#/components/responses/ErrorInternalServer'
     post:
       tags:
         - Users
@@ -197,7 +270,64 @@ paths:
           $ref: '#/components/responses/ErrorNotFound'
         '500':
           $ref: '#/components/responses/ErrorInternalServer'
+    delete:
+      tags:
+        - Users
+      summary: Deletes a User
+      security:
+        - token: []
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the User to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/UserRetrieved'
+        '400':
+          $ref: '#/components/responses/ErrorBadRequest'
+        '403':
+          $ref: '#/components/responses/ErrorForbidden'
+        '404':
+          $ref: '#/components/responses/ErrorNotFound'
+        '500':
+          $ref: '#/components/responses/ErrorInternalServer'
   /users/{userId}/profile:
+    patch:
+      tags:
+        - Profile
+      summary: Update the Profile of the User
+      security:
+        - token: []
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the User
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: An object representing the fields in the Profile to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Profile"
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        '400':
+          $ref: '#/components/responses/ErrorBadRequest'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '404':
+          $ref: '#/components/responses/ErrorNotFound'
+        '415':
+          $ref: '#/components/responses/ErrorUnsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/ErrorInternalServer'
     put:
       tags:
         - Profile
