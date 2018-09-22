@@ -96,6 +96,8 @@ Feature: Login User
     And sends the request
     Then our API should respond with a 200 HTTP status code
     And the payload of the response should be a string
+    And the response string should satisfy the regular expression /^[\w-]+\.[\w-]+\.[\w-.+\/=]*$/
+    And the JWT payload should have a claim with name sub equal to context.userId
 
   Scenario Outline: Login attaching a well-formed payload but invalid credentials
 

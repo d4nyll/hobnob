@@ -1,5 +1,5 @@
-function login(req, res, db, engine, validator, ValidationError) {
-  return engine(req, db, validator, ValidationError)
+function login(req, res, db, engine, validator, ValidationError, sign) {
+  return engine(req, db, validator, ValidationError, sign)
     .then((result) => {
       res.status(200);
       res.set('Content-Type', 'text/plain');

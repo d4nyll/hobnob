@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import elasticsearch from 'elasticsearch';
 import { getSalt } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
 
 import checkEmptyPayload from './middlewares/check-empty-payload';
 import checkContentTypeIsSet from './middlewares/check-content-type-is-set';
@@ -70,7 +71,7 @@ app.use(checkContentTypeIsJson);
 app.use(bodyParser.json({ limit: 1e6 }));
 
 app.get('/salt', injectHandlerDependencies(retrieveSaltHandler, client, handlerToEngineMap, handlerToValidatorMap, getSalt, generateFakeSalt));
-app.post('/login', injectHandlerDependencies(loginHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
+app.post('/login', injectHandlerDependencies(loginHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError, sign));
 app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.get('/users', injectHandlerDependencies(searchUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.get('/users/:userId', injectHandlerDependencies(retrieveUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
