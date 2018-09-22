@@ -1,0 +1,140 @@
+openapi: "3.0.0"
+info:
+  title: Hobnob User Directory
+  version: "1.0.0"
+  contact:
+    name: Support
+    email: dan@danyll.com
+servers:
+  - url: http://localhost:8080/
+    description: Local Development Server
+tags:
+  - name: Authentication
+    description: Authentication-related endpoints
+  - name: Users
+    description: User-related endpoints
+  - name: Profile
+    description: Profile-related endpoints
+components:
+  schemas:
+    Error:
+      properties:
+        message:
+          description: Error message
+          type: string
+    Profile:
+      title: User Profile
+      type: object
+      properties:
+        bio:
+          type: string
+        summary:
+          type: string
+        name:
+          type: object
+          properties:
+            first:
+              type: string
+            middle:
+              type: string
+            last:
+              type: string
+      additionalProperties: false
+    User:
+      title: User Schema
+      properties:
+        email:
+          type: string
+          format: email
+        digest:
+          type: string
+          pattern: ^\\$2[aby]?\\$\\d{1,2}\\$[.\\/A-Za-z0-9]{53}$
+        profile:
+          $ref: '#/components/schemas/Profile'
+      additionalProperties: false
+      required:
+        - email
+        - digest
+      example:
+        email: e@ma.il
+        digest: $2a$10$enCaroMp4gMvEmvCe4EuP.0d5FZ6yc0yUuSJ0pQTt4EO5MXvonUTm
+        profile:
+          bio: Daniel is a species of JavaScript developer that is commonly found in Hong Kong and London. In 2015, Daniel opened his own digital agency called Brew, which specialized in the Meteor framework.
+          summary: JavaScript Developer
+          name:
+            first: Daniel
+            last: Li
+  responses:
+    Created:
+      description: Created
+      content:
+        text/plain:
+          schema:
+            type: string
+    SaltRetrieved:
+      description: Salt Retrieved
+      content:
+        text/plain:
+          schema:
+            type: string
+    ErrorBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ErrorUnsupportedMediaType:
+      description: Unsupported Media Type
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ErrorInternalServer:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+paths:
+  /salt:
+    get:
+      tags:
+        - Authentication
+      summary: Returns the salt of an user based on the user's email
+      description: Even if there are no users with the specified email, this endpoint will still return with a salt. This is to prevent the API leaking information about which email addresses are used to register on the platform.
+      parameters:
+      - name: email
+        in: query
+        description: The email of user to retrieve the salt for
+        required: true
+        schema:
+          type: string
+          format: email
+      responses:
+        '200':
+          $ref: '#/components/responses/SaltRetrieved'
+        '400':
+          $ref: '#/components/responses/ErrorBadRequest'
+        '500':
+          $ref: '#/components/responses/ErrorInternalServer'
+  /users:
+    post:
+      tags:
+        - Users
+      summary: Creates a New User
+      requestBody:
+        description: The New User object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        '201':
+          $ref: '#/components/responses/Created'
+        '400':
+          $ref: '#/components/responses/ErrorBadRequest'
+        '415':
+          $ref: '#/components/responses/ErrorUnsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/ErrorInternalServer'
