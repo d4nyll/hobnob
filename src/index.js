@@ -14,12 +14,14 @@ import generateFakeSalt from './utils/generate-fake-salt';
 import ValidationError from './validators/errors/validation-error';
 
 // Validators
+import loginValidator from './validators/auth/login';
 import createUserValidator from './validators/users/create';
 import searchUserValidator from './validators/users/search';
 import replaceProfileValidator from './validators/profile/replace';
 import updateProfileValidator from './validators/profile/update';
 
 // Handlers
+import loginHandler from './handlers/auth/login';
 import retrieveSaltHandler from './handlers/auth/salt/retrieve';
 import createUserHandler from './handlers/users/create';
 import retrieveUserHandler from './handlers/users/retrieve';
@@ -29,6 +31,7 @@ import replaceProfileHandler from './handlers/profile/replace';
 import updateProfileHandler from './handlers/profile/update';
 
 // Engines
+import loginEngine from './engines/auth/login';
 import retrieveSaltEngine from './engines/auth/salt/retrieve';
 import createUserEngine from './engines/users/create';
 import retrieveUserEngine from './engines/users/retrieve';
@@ -38,6 +41,7 @@ import replaceProfileEngine from './engines/profile/replace';
 import updateProfileEngine from './engines/profile/update';
 
 const handlerToEngineMap = new Map([
+  [loginHandler, loginEngine],
   [retrieveSaltHandler, retrieveSaltEngine],
   [createUserHandler, createUserEngine],
   [retrieveUserHandler, retrieveUserEngine],
@@ -48,6 +52,7 @@ const handlerToEngineMap = new Map([
 ]);
 
 const handlerToValidatorMap = new Map([
+  [loginHandler, loginValidator],
   [createUserHandler, createUserValidator],
   [searchUserHandler, searchUserValidator],
   [replaceProfileHandler, replaceProfileValidator],
@@ -65,6 +70,7 @@ app.use(checkContentTypeIsJson);
 app.use(bodyParser.json({ limit: 1e6 }));
 
 app.get('/salt', injectHandlerDependencies(retrieveSaltHandler, client, handlerToEngineMap, handlerToValidatorMap, getSalt, generateFakeSalt));
+app.post('/login', injectHandlerDependencies(loginHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.post('/users', injectHandlerDependencies(createUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.get('/users', injectHandlerDependencies(searchUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));
 app.get('/users/:userId', injectHandlerDependencies(retrieveUserHandler, client, handlerToEngineMap, handlerToValidatorMap, ValidationError));

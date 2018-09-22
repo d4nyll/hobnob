@@ -3,11 +3,19 @@ import crypto from 'crypto';
 import elasticsearch from 'elasticsearch';
 import Chance from 'chance';
 import jsonfile from 'jsonfile';
-import { Given } from 'cucumber';
+import { Given, Before } from 'cucumber';
 
 const chance = Chance();
 const client = new elasticsearch.Client({
   host: `${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`,
+});
+
+Before(function () {
+  return client.indices.delete({
+    index: process.env.ELASTICSEARCH_INDEX,
+  }).then(() => client.indices.create({
+    index: process.env.ELASTICSEARCH_INDEX,
+  }));
 });
 
 async function createUser() {

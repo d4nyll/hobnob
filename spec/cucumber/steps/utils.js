@@ -7,10 +7,11 @@ function getValidPayload(type, context = {}) {
       return {
         email: context.email || 'e@ma.il',
       };
+    case 'login':
     case 'create user':
       return {
-        email: 'e@ma.il',
-        digest: '$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy',
+        email: context.email || 'e@ma.il',
+        digest: context.digest || '$2y$10$6.5uPfJUCQlcuLO/SNVX3u1yU6LZv.39qOzshHXJVpaq3tJkTwiAy',
       };
     case 'replace user profile':
       return {
