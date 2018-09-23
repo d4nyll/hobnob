@@ -1,24 +1,35 @@
+import { genSaltSync, hashSync } from 'bcryptjs';
 import crypto from 'crypto';
 import elasticsearch from 'elasticsearch';
 import Chance from 'chance';
 import jsonfile from 'jsonfile';
-import { Given } from 'cucumber';
+import { Given, Before } from 'cucumber';
 
 const chance = Chance();
 const client = new elasticsearch.Client({
   host: `${process.env.ELASTICSEARCH_HOSTNAME}:${process.env.ELASTICSEARCH_PORT}`,
 });
 
+Before(function () {
+  return client.indices.delete({
+    index: process.env.ELASTICSEARCH_INDEX,
+  }).then(() => client.indices.create({
+    index: process.env.ELASTICSEARCH_INDEX,
+  }));
+});
+
 async function createUser() {
   const user = {};
   user.email = chance.email();
   user.password = crypto.randomBytes(32).toString('hex');
+  user.salt = genSaltSync(10);
+  user.digest = hashSync(user.password, user.salt);
   const result = await client.index({
     index: process.env.ELASTICSEARCH_INDEX,
     type: 'user',
     body: {
       email: user.email,
-      password: user.password,
+      digest: user.digest,
     },
     refresh: true,
   });
@@ -37,6 +48,8 @@ Given(/^(\w+) new users? (?:is|are) created with random password and email$/, as
   // Sets the first user as the default
   this.email = this.users[0].email;
   this.password = this.users[0].password;
+  this.salt = this.users[0].salt;
+  this.digest = this.users[0].digest;
   this.userId = this.users[0].id;
 });
 

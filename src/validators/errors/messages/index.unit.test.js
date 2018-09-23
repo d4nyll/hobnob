@@ -26,6 +26,15 @@ describe('generateValidationErrorMessage', function () {
     const expectedErrorMessage = "The '.test.path' field must be of type string";
     assert.equal(actualErrorMessage, expectedErrorMessage);
   });
+  it('should return the correct string when error.keyword is "pattern"', function () {
+    const errors = [{
+      keyword: 'pattern',
+      dataPath: '.test.path',
+    }];
+    const actualErrorMessage = generateValidationErrorMessage(errors);
+    const expectedErrorMessage = "The '.test.path' field should be a valid bcrypt digest";
+    assert.equal(actualErrorMessage, expectedErrorMessage);
+  });
   it('should return the correct string when error.keyword is "format"', function () {
     const errors = [{
       keyword: 'format',

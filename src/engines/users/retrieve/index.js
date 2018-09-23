@@ -3,6 +3,7 @@ function retrieve(req, db) {
     index: process.env.ELASTICSEARCH_INDEX,
     type: 'user',
     id: req.params.userId,
+    _sourceExclude: 'digest',
   }).then(res => res._source)
     .catch((err) => {
       if (err.status === 404) {
