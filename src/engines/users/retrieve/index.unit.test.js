@@ -25,6 +25,7 @@ describe('Engine - User - Retrieve', function () {
         index: process.env.ELASTICSEARCH_INDEX,
         type: 'user',
         id: TEST_USER_ID,
+        _sourceExclude: 'digest',
       });
     });
   });

@@ -6,6 +6,9 @@ function generateValidationErrorMessage(errors, pathPrefix = '') {
   if (error.keyword === 'type') {
     return `The '${pathPrefix}${error.dataPath}' field must be of type ${error.params.type}`;
   }
+  if (error.keyword === 'pattern') {
+    return `The '${pathPrefix}${error.dataPath}' field should be a valid bcrypt digest`;
+  }
   if (error.keyword === 'format') {
     return `The '${pathPrefix}${error.dataPath}' field must be a valid ${error.params.format}`;
   }

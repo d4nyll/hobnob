@@ -61,8 +61,13 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "ajv": "^6.5.3",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "elasticsearch": "^15.1.1",
-    "express": "^4.16.3"
+    "escape-string-regexp": "^1.0.5",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "random-seed": "^0.3.0",
+    "special-escape": "^0.1.0"
   }
 }
