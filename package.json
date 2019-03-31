@@ -45,7 +45,7 @@
     "chance": "^1.0.16",
     "cucumber": "^4.2.1",
     "dotenv-cli": "^1.4.0",
-    "eslint": "^5.13.0",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "http-server": "^0.11.1",
